@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/femibiwoye/go-test/models"
+	"github.com/femibiwoye/go-test/utils"
 	"github.com/go-playground/validator"
 	"github.com/golang-jwt/jwt"
-	"github.com/gregoflash05/gradely/models"
-	"github.com/gregoflash05/gradely/utils"
 	"golang.org/x/crypto/bcrypt"
 )
 

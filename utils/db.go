@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/gregoflash05/gradely/models"
+	"github.com/femibiwoye/go-test/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

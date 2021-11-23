@@ -11,22 +11,22 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/femibiwoye/go-test/models"
+	"github.com/femibiwoye/go-test/utils"
 	"github.com/gorilla/mux"
-	"github.com/gregoflash05/gradely/models"
-	"github.com/gregoflash05/gradely/utils"
 	"github.com/joho/godotenv"
 )
 
 var (
 	TestBuyerEmail     = "test@gmail.com"
-	TestBuyerUserName  = "test@gmail.com"
-	TestsellerEmail    = "test1@gmail.com"
-	TestsellerUserName = "test1@gmail.com"
+	TestBuyerUserName  = "test2@gmail.com"
+	TestsellerEmail    = "test3@gmail.com"
+	TestsellerUserName = "test4@gmail.com"
 	TestIsVerified     = true
 	TestFullName       = "testing"
 	TestPhone          = "09032094355"
 	TestPassword       = "testing123"
-	TestDepositAmount  = 1000
+	TestDepositAmount  = 100
 	TestProductId      uint
 	TestToken          string
 	TestSToken         string

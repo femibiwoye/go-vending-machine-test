@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/femibiwoye/go-test/models"
+	"github.com/femibiwoye/go-test/utils"
 	"github.com/gorilla/mux"
-	"github.com/gregoflash05/gradely/models"
-	"github.com/gregoflash05/gradely/utils"
 )
 
 func ProductCreate(response http.ResponseWriter, request *http.Request) {

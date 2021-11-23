@@ -7,12 +7,12 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gregoflash05/gradely/models"
-	"github.com/gregoflash05/gradely/utils"
+	"github.com/femibiwoye/go-test/models"
+	"github.com/femibiwoye/go-test/utils"
 )
 
 var (
-	possibleDepositAmounts = []int{50, 100, 200, 500, 1000}
+	possibleDepositAmounts = []int{5, 10, 20, 50, 100}
 )
 
 func Deposit(response http.ResponseWriter, request *http.Request) {
@@ -37,7 +37,7 @@ func Deposit(response http.ResponseWriter, request *http.Request) {
 	utils.ParseJSONFromRequest(request, &depositRequest)
 
 	if !Contains(depositRequest.Amount, possibleDepositAmounts) {
-		utils.GetError(errors.New("you can only deposit, 50, 100, 200, 500, 1000 coins"), http.StatusBadRequest, response)
+		utils.GetError(errors.New("you can only deposit, 5, 10, 20, 50, 100 coins"), http.StatusBadRequest, response)
 		return
 	}
 

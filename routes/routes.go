@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/femibiwoye/go-test/controllers"
 	"github.com/gorilla/mux"
-	"github.com/gregoflash05/gradely/controllers"
 )
 
 type Handler struct {

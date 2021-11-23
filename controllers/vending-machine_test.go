@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/gregoflash05/gradely/models"
+	"github.com/femibiwoye/go-test/models"
 )
 
 func TestDeposit(t *testing.T) {
@@ -66,7 +66,7 @@ func TestDeposit(t *testing.T) {
 	})
 
 	t.Run("test amount deposited", func(t *testing.T) {
-		testData := []byte(`{"amount": 60}`)
+		testData := []byte(`{"amount": 50}`)
 		buf := bytes.NewBuffer(testData)
 
 		r := getRouter()
@@ -78,7 +78,7 @@ func TestDeposit(t *testing.T) {
 		fmt.Println(response.Code)
 
 		assertStatusCode(t, response.Code, http.StatusBadRequest)
-		assertResponseMessage(t, parseResponse(response)["message"].(string), "you can only deposit, 50, 100, 200, 500, 1000 coins")
+		assertResponseMessage(t, parseResponse(response)["message"].(string), "you can only deposit, 5, 10, 20, 50 and 100 coins")
 	})
 
 	t.Run("test deposited successfully", func(t *testing.T) {
@@ -161,7 +161,7 @@ func TestBuy(t *testing.T) {
 
 	t.Run("test product not found", func(t *testing.T) {
 		testData := models.BuyRequest{
-			ProductID: 1000,
+			ProductID: 100,
 			Quantity:  4,
 		}
 		buf := new(bytes.Buffer)

@@ -8,11 +8,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/femibiwoye/go-test/routes"
+	"github.com/femibiwoye/go-test/utils"
 	"github.com/gorilla/handlers"
-	"github.com/gregoflash05/gradely/routes"
-	"github.com/gregoflash05/gradely/utils"
 	"github.com/joho/godotenv"
-
 	"github.com/rs/cors"
 )
 
@@ -24,7 +23,7 @@ func (app *App) Run() error {
 
 	_, err := utils.ConnectToDB(os.Getenv("SQL_DATABASE_URL"))
 	if err != nil {
-		return errors.New("could not connect to MongoDB")
+		return errors.New("could not connect to Database")
 	}
 	fmt.Println("database connected")
 	utils.Migrate()
@@ -41,7 +40,7 @@ func (app *App) Run() error {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	fmt.Println("Gradely Pretest App running on port ", app.Port)
+	fmt.Println("Pretest App running on port ", app.Port)
 
 	if err := srv.ListenAndServe(); err != nil {
 		return err
@@ -69,7 +68,7 @@ func main() {
 	app := App{Port: port}
 
 	if err := app.Run(); err != nil {
-		fmt.Println("Error occur while starting the Zuri Chat API.")
+		fmt.Println("Error occur while starting API.")
 		log.Fatal(err)
 	}
 }
