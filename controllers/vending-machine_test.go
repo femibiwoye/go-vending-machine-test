@@ -102,6 +102,7 @@ func TestDeposit(t *testing.T) {
 
 }
 
+// TestBuy this test all possible buy scenario
 func TestBuy(t *testing.T) {
 
 	t.Run("test no user token", func(t *testing.T) {
@@ -218,6 +219,8 @@ func TestBuy(t *testing.T) {
 	})
 
 }
+
+// TestProductCreate Test product create
 func TestProductCreate(t *testing.T) {
 
 	t.Run("test no user token", func(t *testing.T) {
