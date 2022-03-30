@@ -84,10 +84,12 @@ func FileExists(name string) bool {
 	return !os.IsNotExist(err)
 }
 
+// Accept json and decode. Return decoded value or error
 func ParseJSONFromRequest(r *http.Request, v interface{}) error {
 	return json.NewDecoder(r.Body).Decode(v)
 }
 
+// Check if email string is valid
 func IsValidEmail(email string) bool {
 	_, err := mail.ParseAddress(email)
 
