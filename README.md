@@ -31,4 +31,4 @@ Code readability and optimization
 If somebody is already logged in with the same credentials, the user should be given a message "There is already an active session using your account". In this case the user should be able to terminate all the active sessions on their account via an endpoint i.e. /logout/all
 Attention to security
 
-## If you wish to improve this code, please go ahead and do it.
+### If you wish to improve this code, please go ahead and do it.
