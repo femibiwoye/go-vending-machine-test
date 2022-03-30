@@ -10,6 +10,7 @@ import (
 	"github.com/femibiwoye/go-test/models"
 )
 
+// TestDeposit this will test all posible deposits
 func TestDeposit(t *testing.T) {
 
 	t.Run("test no user token", func(t *testing.T) {
