@@ -16,6 +16,7 @@ func NewHandler() *Handler {
 	return &Handler{}
 }
 
+// SetupRoutes is a function to setup all routes. It is exported so it can be used by main.go
 func (h *Handler) SetupRoutes() {
 	h.Router = mux.NewRouter().StrictSlash(true)
 

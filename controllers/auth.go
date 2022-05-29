@@ -30,6 +30,7 @@ var (
 )
 
 // Method to hash password.
+// Returns hashed password.
 func GenerateHashPassword(password string) (string, error) {
 	cost := 14
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), cost)
@@ -37,11 +38,16 @@ func GenerateHashPassword(password string) (string, error) {
 	return string(bytes), err
 }
 
+// Method to check password.
+// Returns true if password matches.
+// Returns false if password does not match.
+// Returns error if hashing fails.
 func CheckPassword(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
 }
 
+// ExtractToken will extract token from the request header
 func ExtractToken(r *http.Request) string {
 	bearToken := r.Header.Get("Authorization")
 	//normally Authorization the_token_xxx
@@ -52,6 +58,8 @@ func ExtractToken(r *http.Request) string {
 	return ""
 }
 
+// FetchUserByEmail will fetch user by email
+// Returns user object
 func FetchUserByEmail(email string) *models.User {
 	u := &models.User{}
 	utils.GetItemByField(&u, "email", email)
@@ -59,6 +67,8 @@ func FetchUserByEmail(email string) *models.User {
 	return u
 }
 
+//UserCreate will create a new user
+// Returns user object
 func UserCreate(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
@@ -70,6 +80,7 @@ func UserCreate(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	// convert email to lowercase
 	userEmail := strings.ToLower(user.Email)
 	if !utils.IsValidEmail(userEmail) {
 		utils.GetError(errEmailNotValid, http.StatusBadRequest, response)
@@ -78,6 +89,7 @@ func UserCreate(response http.ResponseWriter, request *http.Request) {
 
 	var checkUser models.User
 
+	// check if user exists
 	result := utils.GetItemsByField(&checkUser, "email", userEmail)
 	if result.RowsAffected > 0 {
 		utils.GetError(
@@ -89,6 +101,7 @@ func UserCreate(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	// hash password
 	hashPassword, err := GenerateHashPassword(user.Password)
 	if err != nil {
 		utils.GetError(errHashingFailed, http.StatusInternalServerError, response)
@@ -115,6 +128,11 @@ func UserCreate(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("user created", respse, response)
 }
 
+// UserLogin will login a user
+// Returns user object
+// Returns error if login fails
+// Returns error if user not found
+// Returns error if user is not verified
 func UserLogin(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
@@ -165,6 +183,8 @@ func UserLogin(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("Login successful", token, response)
 }
 
+//CreateToken will create a new token
+// Returns token string
 func CreateToken(userid string) (string, error) {
 	var err error
 	//Creating Access Token
@@ -187,6 +207,7 @@ func CreateToken(userid string) (string, error) {
 	return token, nil
 }
 
+// VerifyToken will verify token
 func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -209,6 +230,8 @@ func VerifyToken(r *http.Request) (*jwt.Token, error) {
 
 	return token, nil
 }
+
+// TokenValid will check if token is valid
 func TokenValid(r *http.Request) (string, error) {
 	token, err := VerifyToken(r)
 	if err != nil {
@@ -221,12 +244,15 @@ func TokenValid(r *http.Request) (string, error) {
 	}
 	return fmt.Sprintf("%v", claims["user_id"]), nil
 }
+
+// DeleteMapProps will delete map properties
 func DeleteMapProps(m map[string]interface{}, s []string) {
 	for _, v := range s {
 		delete(m, v)
 	}
 }
 
+// VerifyTokenHandler will verify token
 func VerifyTokenHandler(response http.ResponseWriter, request *http.Request) {
 	_, err := TokenValid(request)
 	if err != nil {
@@ -237,6 +263,9 @@ func VerifyTokenHandler(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("token is valid", "", response)
 }
 
+// GetUser will get user
+// Returns user object
+// Returns error if user not found
 func GetUser(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {
@@ -259,6 +288,7 @@ func GetUser(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("user retrieved successfully", user, response)
 }
 
+// Logout will logout user
 func Logout(response http.ResponseWriter, request *http.Request) {
 	_, err := TokenValid(request)
 	if err != nil {
@@ -266,6 +296,7 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	// delete token
 	result := utils.Db.Delete(models.Session{}, "token = ?", ExtractToken(request))
 
 	if result.RowsAffected < 1 {
@@ -277,6 +308,8 @@ func Logout(response http.ResponseWriter, request *http.Request) {
 
 }
 
+// LogoutAll will logout all users
+// Returns error if user not found
 func LogoutAll(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {
@@ -284,6 +317,7 @@ func LogoutAll(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	// delete token
 	uintID, _ := (strconv.ParseUint(userID, 10, 64))
 	result := utils.Db.Delete(models.Session{}, "user_id = ?", uint(uintID))
 
@@ -295,6 +329,7 @@ func LogoutAll(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("logout all sessions successful", "", response)
 }
 
+// UserUpdate will update user
 func UserUpdate(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {
@@ -334,6 +369,7 @@ func UserUpdate(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("user successfully updated", nil, response)
 }
 
+// UserDelete will delete user
 func UserDelete(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {

@@ -15,6 +15,7 @@ var (
 	possibleDepositAmounts = []int{5, 10, 20, 50, 100}
 )
 
+// Deposit handles the deposit request. It checks if the user has enough money to buy the product.
 func Deposit(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {
@@ -54,6 +55,7 @@ func Deposit(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("deposit successful", nil, response)
 }
 
+// DepositReset handles the reset request.
 func DepositReset(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {
@@ -89,6 +91,9 @@ func DepositReset(response http.ResponseWriter, request *http.Request) {
 	utils.GetSuccess("Reset successful", nil, response)
 }
 
+// BuyProduct handles the buy product request. It checks if the user has enough money to buy the product.
+// TODO: add validation
+// TODO: add transaction
 func BuyProduct(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {

@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// ProductCreate is a function to create a new product
 func ProductCreate(response http.ResponseWriter, request *http.Request) {
 	userID, err := TokenValid(request)
 	if err != nil {
@@ -31,8 +32,10 @@ func ProductCreate(response http.ResponseWriter, request *http.Request) {
 
 	var user models.User
 
+	// GetItemByPrimaryKey is a function to get a user by primary key
 	utils.GetItemByPrimaryKey(&user, uint(uintID))
 
+	// check if user is not a seller
 	if strings.ToLower(user.Role) != "seller" {
 		utils.GetError(fmt.Errorf("user is not a seller"), http.StatusNotAcceptable, response)
 		return
@@ -55,6 +58,7 @@ func ProductCreate(response http.ResponseWriter, request *http.Request) {
 
 }
 
+// ProductGetALL is a function to get all products
 func ProductGetALL(response http.ResponseWriter, request *http.Request) {
 	_, err := TokenValid(request)
 	if err != nil {
@@ -73,6 +77,7 @@ func ProductGetALL(response http.ResponseWriter, request *http.Request) {
 
 }
 
+// ProductGet is a function to get a product by product_id
 func ProductGet(response http.ResponseWriter, request *http.Request) {
 	productID := mux.Vars(request)["product_id"]
 
@@ -85,6 +90,7 @@ func ProductGet(response http.ResponseWriter, request *http.Request) {
 	uintProductID, _ := (strconv.ParseUint(productID, 10, 64))
 	var product models.Product
 
+	// GetItemByPrimaryKey is a function to get a product by primary key
 	result := utils.GetItemsByField(&product, "id", uint(uintProductID))
 	if result.RowsAffected < 1 {
 		utils.GetError(errors.New("product not found"), http.StatusNotFound, response)
@@ -95,6 +101,7 @@ func ProductGet(response http.ResponseWriter, request *http.Request) {
 
 }
 
+// ProductDelete is a function to delete a product by product_id
 func ProductDelete(response http.ResponseWriter, request *http.Request) {
 	productID := mux.Vars(request)["product_id"]
 
@@ -144,6 +151,7 @@ func ProductDelete(response http.ResponseWriter, request *http.Request) {
 
 }
 
+// ProductUpdate is a function to update a product by product_id
 func ProductUpdate(response http.ResponseWriter, request *http.Request) {
 	productID := mux.Vars(request)["product_id"]
 

@@ -49,24 +49,28 @@ func getHTTPResponse(t *testing.T, r *mux.Router, req *http.Request) *httptest.R
 	return w
 }
 
+// assertStatusCode asserts that the response status code is what is expected
 func assertStatusCode(t *testing.T, got, expected int) {
 	if got != expected {
 		t.Errorf("got status %d expected status %d", got, expected)
 	}
 }
 
+// assertResponseMessage asserts that the response message is what is expected
 func assertResponseMessage(t *testing.T, got, expected string) {
 	if got != expected {
 		t.Errorf("got message: %q expected: %q", got, expected)
 	}
 }
 
+// parseResponse parses the response body and returns the response object
 func parseResponse(w *httptest.ResponseRecorder) map[string]interface{} {
 	res := make(map[string]interface{})
 	json.NewDecoder(w.Body).Decode(&res)
 	return res
 }
 
+// TestMain is the main function for testing
 func TestMain(m *testing.M) {
 	// load .env file if it exists
 	err := godotenv.Load("../.env")

@@ -11,6 +11,7 @@ var (
 	Db *gorm.DB
 )
 
+// ConnectToDB connects to the database and returns a connection. It will panic if the connection cannot be established.
 func ConnectToDB(databaseUrl string) (*gorm.DB, error) {
 	dbConnection, err := gorm.Open(mysql.Open(databaseUrl), &gorm.Config{})
 	if err != nil {
